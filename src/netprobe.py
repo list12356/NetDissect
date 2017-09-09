@@ -22,9 +22,6 @@ import upsample
 import rotate
 import expdir
 
-caffe.set_mode_gpu()
-caffe.set_device(0)
-
 def create_probe(
         directory, dataset, definition, weights, mean, blobs,
         colordepth=3,
@@ -249,7 +246,17 @@ if __name__ == '__main__':
                 '--colordepth',
                 type=int, default=3,
                 help='set to 1 for grayscale')
+        parser.add_argument(
+                '--gpu',
+                type=bool, default=False,
+                help='use gpuor not')
         args = parser.parse_args()
+
+        if (args.gpu==True):
+            caffe.set_mode_gpu()
+            caffe.set_device(0)
+        else:
+            caffe.set_mode_cpu()
         
         create_probe(
             args.directory, args.dataset, args.definition, args.weights,
