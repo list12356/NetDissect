@@ -1,0 +1,17 @@
+clear all;
+clc;
+inputDataSize = 300;
+basisNum = 20;
+inputFileName = 'conv5.mmap';
+inputMmap = memmapfile('conv5.mmap', 'Format','single');
+inputDataDim = [inputDataSize, 256, 13, 13];
+conv5 = reshape(inputMmap.Data, inputDataDim);
+reshapedArray = reshape(conv5,300, 256, 13*13);
+reshapedArray = reshape(reshapedArray,300, 256 * 13 * 13).';
+[W, H] = nnmf(reshapedArray(:, 1:200), basisNum);
+indices = [6, 47, 68, 80, 135, 166];
+testIndices = [203, 231, 242, 272, 296];
+figure(1);
+plot(H(:, indices));
+figure(2);
+plot((reshapedArray(:, testIndices) \ W).');
