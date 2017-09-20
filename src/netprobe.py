@@ -123,6 +123,7 @@ def create_probe(
         net.blobs[input_blob].reshape(*(inp.shape))
         net.blobs[input_blob].data[...] = inp
         result = net.forward(blobs=blobs)
+        #rotation
         if rot is not None:
             for key in out.keys():
                 result[key] = numpy.swapaxes(numpy.tensordot(
@@ -248,11 +249,15 @@ if __name__ == '__main__':
                 help='set to 1 for grayscale')
         parser.add_argument(
                 '--gpu',
-                type=bool, default=False,
+                type=int, default=1,
                 help='use gpuor not')
+        parser.add_argument(
+            '--output_flag',
+            default='',
+            help='additional flag for outputfile')
         args = parser.parse_args()
 
-        if (args.gpu==True):
+        if (args.gpu == 1):
             caffe.set_mode_gpu()
             caffe.set_device(0)
         else:
